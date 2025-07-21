@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>CRUD SQL Server, PHP, JS</title>
+</head>
+<body>
+  <h1>Listado de Estudiantes</h1>
+
+  <!-- Botones -->
+  <button onclick="listarEstudiantes()">Listar</button>
+  <button id="btnCrear">Crear</button>
+
+  <!-- Tabla -->
+  <table border="1">
+    <thead id="tabla-head"></thead>
+    <tbody id="tabla-estudiantes"></tbody>
+  </table>
+
+  <!-- Formulario de edición -->
+  <form id="formEditar" style="display: none;" onsubmit="guardarEdicion(event)">
+    <h3>Editar Estudiante</h3>
+    <input type="hidden" id="editar-id" name="id">
+    <label>Nombre: <input type="text" id="editar-nombre" name="nombre"></label><br>
+    <label>Edad: <input type="number" id="editar-edad" name="edad"></label><br>
+    <button type="submit">Guardar</button>
+  </form>
+
+  <!-- Modal para crear estudiante -->
+  <div id="crearModal" style="display:none; position:fixed; top:20%; left:35%; background:white; padding:20px; border:1px solid #444; box-shadow: 2px 2px 10px rgba(0,0,0,0.5); z-index:999;">
+    <h3>Crear Estudiante</h3>
+    <form id="formCrear">
+      <label>ID:</label><br>
+      <input type="text" name="id" required><br><br>
+
+      <label>Nombre:</label><br>
+      <input type="text" name="nombre" required><br><br>
+
+      <label>Edad:</label><br>
+      <input type="number" name="edad" required><br><br>
+
+      <button type="submit">Guardar</button>
+      <button type="button" onclick="cerrarModal()">Cancelar</button>
+    </form>
+  </div>
+
+  <script>
+    // Listar estudiantes
+    function listarEstudiantes() {
+      fetch('index.php?funcion=listarEstudiantes')
+        .then(response => response.json())
+        .then(data => {
+          const thead = document.getElementById('tabla-head');
+          const tbody = document.getElementById('tabla-estudiantes');
+          thead.innerHTML = '';
+          tbody.innerHTML = '';
+
+          if (data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="100%">No se encontraron datos</td></tr>';
+            return;
+          }
+
+          const columnas = Object.keys(data[0]);
+          let trHead = '<tr>';
+          columnas.forEach(col => {
+            trHead += `<th>${col}</th>`;
+          });
+          trHead += '<th>Acciones</th></tr>';
+          thead.innerHTML = trHead;
+
+          data.forEach(fila => {
+            let tr = '<tr>';
+            columnas.forEach(col => {
+              tr += `<td>${fila[col]}</td>`;
+            });
+            tr += `
+              <td>
+                <button onclick="editarEstudiante(${fila.ID}, '${fila.Nombre}', ${fila.Edad})">Editar</button>
+                <button onclick="eliminarEstudiante(${fila.ID})">Eliminar</button>
+              </td>
+            `;
+            tr += '</tr>';
+            tbody.innerHTML += tr;
+          });
+        })
+        .catch(error => {
+          console.error('Error al listar:', error);
+        });
+    }
+
+    // Mostrar formulario para editar
+    function editarEstudiante(id, nombre, edad) {
+      document.getElementById('formEditar').style.display = 'block';
+      document.getElementById('editar-id').value = id;
+      document.getElementById('editar-nombre').value = nombre;
+      document.getElementById('editar-edad').value = edad;
+    }
+
+    // Guardar edición
+    function guardarEdicion(event) {
+      event.preventDefault();
+      const formData = new FormData(document.getElementById('formEditar'));
+
+      fetch('index.php?funcion=editarEstudiante', {
+        method: 'POST',
+        body: formData
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.mensaje) {
+            alert(data.mensaje);
+            listarEstudiantes();
+            document.getElementById('formEditar').style.display = 'none';
+          } else {
+            alert('Error: ' + data.error);
+          }
+        })
+        .catch(err => {
+          console.error('Error al editar:', err);
+        });
+    }
+
+    // Eliminar estudiante
+    function eliminarEstudiante(id) {
+      if (confirm('¿Seguro que quieres eliminar al estudiante con ID ' + id + '?')) {
+        fetch('index.php?funcion=eliminarEstudiante', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: 'id=' + encodeURIComponent(id)
+        })
+          .then(response => response.json())
+          .then(result => {
+            if (result.mensaje) {
+              alert(result.mensaje);
+              listarEstudiantes();
+            } else {
+              alert('Error: ' + (result.error || 'desconocido'));
+            }
+          })
+          .catch(error => {
+            console.error('Error al eliminar:', error);
+          });
+      }
+    }
+
+    // Cerrar modal de creación
+    function cerrarModal() {
+      document.getElementById('crearModal').style.display = 'none';
+    }
+
+    // Esperar que todo el DOM cargue para evitar errores
+    window.addEventListener('DOMContentLoaded', () => {
+      const modal = document.getElementById('crearModal');
+      const btnCrear = document.getElementById('btnCrear');
+      const formCrear = document.getElementById('formCrear');
+
+      btnCrear.addEventListener('click', () => {
+        modal.style.display = 'block';
+      });
+
+      formCrear.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(formCrear);
+        formData.append('funcion', 'crearEstudiante');
+
+        fetch('index.php', {
+          method: 'POST',
+          body: formData
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.error) {
+              alert('Error: ' + data.error);
+            } else {
+              alert('Estudiante creado correctamente');
+              cerrarModal();
+              formCrear.reset();
+              listarEstudiantes();
+            }
+          })
+          .catch(err => {
+            alert('Error al crear: ' + err);
+          });
+      });
+    });
+  </script>
+</body>
+</html>
