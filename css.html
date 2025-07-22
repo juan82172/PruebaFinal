@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Guía CSS Completa</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        section {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        .demo {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            display: inline-block;
+        }
+        .hover-demo:hover {
+            background-color: #cceeff;
+            color: #000;
+        }
+        .transition-demo {
+            transition: background-color 1s, transform 0.5s;
+        }
+        .transition-demo:hover {
+            background-color: #ffcccb;
+            transform: scale(1.1);
+        }
+        .animation-demo {
+            animation: rotar 3s infinite linear;
+        }
+        @keyframes rotar {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Guía CSS Completa con Ejemplos</h1>
+
+    <section>
+        <h2>📦 Box Model</h2>
+        <ul>
+            <li><strong>margin:</strong> espacio exterior del elemento.</li>
+            <li><strong>padding:</strong> espacio interior entre el borde y el contenido.</li>
+            <li><strong>border:</strong> línea alrededor del contenido + padding.</li>
+            <li><strong>width / height:</strong> dimensiones del elemento.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>🎨 Colores y Fondo</h2>
+        <ul>
+            <li><strong>background-color:</strong> color de fondo.</li>
+            <li><strong>color:</strong> color del texto.</li>
+            <li><strong>background-image:</strong> imagen de fondo.</li>
+            <li><strong>opacity:</strong> opacidad del elemento (0-1).</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>🖱️ Efectos al pasar el mouse (hover)</h2>
+        <p class="demo hover-demo">Pasa el mouse por aquí</p>
+        <pre><code>.elemento:hover {
+    background-color: #cceeff;
+    color: black;
+}</code></pre>
+    </section>
+
+    <section>
+        <h2>🌀 Transiciones</h2>
+        <p class="demo transition-demo">Pasa el mouse (transición)</p>
+        <pre><code>.elemento {
+    transition: background-color 1s, transform 0.5s;
+}</code></pre>
+    </section>
+
+    <section>
+        <h2>🎞️ Animaciones</h2>
+        <p class="demo animation-demo">Animación</p>
+        <pre><code>@keyframes rotar {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+.elemento {
+    animation: rotar 3s infinite linear;
+}</code></pre>
+    </section>
+
+    <section>
+        <h2>🔠 Texto</h2>
+        <ul>
+            <li><strong>font-family:</strong> tipo de letra.</li>
+            <li><strong>font-size:</strong> tamaño del texto.</li>
+            <li><strong>font-weight:</strong> grosor del texto.</li>
+            <li><strong>text-align:</strong> alineación del texto.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>🎯 Posicionamiento</h2>
+        <ul>
+            <li><strong>display:</strong> tipo de caja (block, inline, flex, grid).</li>
+            <li><strong>position:</strong> posicionamiento (relative, absolute, fixed, sticky).</li>
+            <li><strong>top, right, bottom, left:</strong> desplazamiento desde el borde correspondiente.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>🧩 Extras útiles</h2>
+        <ul>
+            <li><strong>box-shadow:</strong> sombra exterior del elemento.</li>
+            <li><strong>border-radius:</strong> bordes redondeados.</li>
+            <li><strong>cursor:</strong> tipo de cursor (pointer, move, default...)</li>
+            <li><strong>z-index:</strong> orden de apilamiento.</li>
+            <li><strong>overflow:</strong> comportamiento del contenido que se desborda (hidden, scroll...)</li>
+        </ul>
+    </section>
+    <h5>
+        cd "C:\Users\TuNombre\Desktop\mi-proyecto"
+
+git init &emsp;	✅ Esto crea una carpeta oculta .git donde Git guarda todos los cambios y versiones del proyecto.<br>
+
+
+
+git add .		&emsp;		✅ El punto . significa "todos los archivos" en la carpeta actual. Puedes agregar archivos específicos como: git add index.html.
+<br>
+git commit -m "Primer commit del proyecto"		&emsp;✅ Esto guarda una “foto” del estado de los archivos con un mensaje descriptivo. Es como decir: "Así estaba mi proyecto en este momento."
+<br>
+git remote add origin https://github.com/tu-usuario/mi-proyecto.git		&emsp;✅ origin es el nombre que le das al repositorio remoto. Este comando enlaza tu proyecto local con el de GitHub.
+<br>
+git branch -M main		&emsp;	✅ Esto cambia el nombre de la rama principal a main (por defecto Git usaba master, pero ahora se usa main).
+<br>
+git push -u origin main		&emsp;	✅ Esto sube tu código local al repositorio remoto por primera vez.
+
+<br><br>
+<br><br>
+
+git add .<br>
+git commit -m "Tu mensaje"<br>
+git push<br>
+</h5>
+</body>
+</html>
